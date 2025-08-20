@@ -1,35 +1,42 @@
-# OpenHud - An open source CS:GO Legacy Custom Hud.
+# OpenHud CS:GO Legacy - Windows Build
 
-Join the community [Discord](https://discord.gg/HApB9HyaWM)!
+Bu repository CS:GO Legacy için uyarlanmış OpenHud'un Windows build'ini içerir.
 
-- Tech: Electron, React, Typescript, NodeJS, Express, Socketio, SQLite3
-- Styling: TailwindCSS (admin panel) / Sass (hud)
+## �� Kurulum
 
-## License
+1. **OpenHud.exe** dosyasını çalıştırın
+2. **gamestate_integration_openhud.cfg** dosyasını CS:GO config klasörünüze kopyalayın
+3. **CS:GO Legacy'yi Windowed Fullscreen modunda başlatın**
+4. **Takım, oyuncu ve maç ayarlarını yapın**
+5. **Spectator olarak maça katılın**
 
-This software is licensed under a custom license that allows free use and modification — including in monetized streams and videos — but **forbids resale** of the program or modified versions.
+## 📁 Dosyalar
 
-If you redistribute modified versions, you must provide proper credit and disclose what changes were made.
+- **OpenHud.exe** - Ana uygulama
+- **gamestate_integration_openhud.cfg** - CS:GO Legacy entegrasyon dosyası
+- **resources/** - Uygulama kaynakları
+- **locales/** - Dil dosyaları
+- **Diğer .dll ve .pak dosyaları** - Electron runtime dosyaları
 
-See [LICENSE](./LICENSE) for full details.
+## 🎯 Özellikler
 
-# Getting Started:
+- ✅ CS:GO Legacy uyumlu
+- ✅ MR15 (15 round) sistemi
+- ✅ Spectator overlay
+- ✅ OBS entegrasyonu (http://localhost:1349/hud)
+- ✅ Takım ve oyuncu yönetimi
+- ✅ Maç yönetimi ve veto sistemi
 
-- Download the latest .zip form the releases page and unzip it.
-- Copy the gamestate_integration_openhud.cfg file from the .zip /resources/src/assets to your CS:GO config folder (the same folder you'd put an autoexec.cfg). (Will make it automatic in the future)
-- Launch openhud.exe and run CS:GO Legacy in WindowedFullscreen mode.
-- You're done! Create your players, teams, and matches. Start CS:GO Legacy and join a match (or demo) as a spectator.
-- For the Spectator overlay, click the overlay button in the side menu of the app.
-- For OBS overlay, create a Browser Source, delete all of the custom css, and use the url: http://localhost:1349/hud
+## 🔧 Sistem Gereksinimleri
 
-Hopefully it ends up looking very nice and lets a lot of people use it in their streams!
+- Windows 10/11
+- CS:GO Legacy
+- 4GB RAM (önerilen)
+- 500MB disk alanı
 
-# OpenHud React Hud based on [Lexogrine react hud](https://github.com/JohnTimmermann/OpenHud-React-Hud)
+## 📞 Destek
 
-![Custom CS:GO Legacy Hud](https://i.imgur.com/OWexW9T.png)
+Sorunlar için GitHub Issues kullanın.
 
-# Admin Panel
-
-![AdminPanel/Matches](https://i.imgur.com/8WwunXg.png)
-![AdminPanel/Players](https://i.imgur.com/3oKFgIJ.png)
-![AdminPanel/Teams](https://i.imgur.com/vIlKeM6.png)
+---
+**CS:GO Legacy için özel olarak uyarlanmıştır.**
