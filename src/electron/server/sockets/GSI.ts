@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CSGO, CSGOGSI, CSGORaw, RoundOutcome, Score } from "csgogsi";
+import { CSGO, CSGOGSI, CSGORaw, Score } from "csgogsi";
 import { io } from "../sockets/socket.js";
 import {
   getCoaches,
@@ -8,40 +8,75 @@ import {
 } from "../services/index.js";
 
 export const GSI = new CSGOGSI();
-let lastGSI: CSGO;
-GSI.regulationMR = 12;
+GSI.regulationMR = 15; // CS:GO Legacy uses MR15 (15 rounds to win)
 GSI.overtimeMR = 3;
 
-export const readGameData = async (req: Request, res: Response) => {
-  const data: CSGORaw = req.body;
-  const coaches = (await getCoaches()).map(
-    (coach) => coach.steamid,
-  ) as string[];
-  fixGSIData(data, coaches);
-  GSI.digest(data);
-  io.emit("update", data);
-  res.sendStatus(200);
+// CS:GO Legacy mode flag
+const isLegacyMode = true;
+
+console.log("CS:GO Legacy Mode Active – processing game state accordingly.");
+
+export const readGameData = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const data: CSGORaw = req.body;
+    
+    if (!data || typeof data !== 'object') {
+      console.error("Invalid game state data received");
+      res.sendStatus(400);
+      return;
+    }
+
+    const coaches = (await getCoaches()).map(
+      (coach) => coach.steamid,
+    ) as string[];
+    
+    fixGSIData(data, coaches);
+    GSI.digest(data);
+    io.emit("update", data);
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error processing game state data:", error);
+    res.sendStatus(500);
+  }
 };
 
 const fixGSIData = (data: CSGORaw, coaches: string[]) => {
-  if (data.player) {
-    data.player.observer_slot =
-      data.player.observer_slot !== undefined && data.player.observer_slot === 9
-        ? 0
-        : (data.player.observer_slot || 0) + 1;
-  }
-
-  if (data.allplayers) {
-    Object.entries(data.allplayers).forEach(([id, player]) => {
-      if (player && !coaches.includes(id)) {
-        player.observer_slot =
-          player.observer_slot === 9 ? 0 : (player.observer_slot || 0) + 1;
+  try {
+    if (data.player) {
+      // CS:GO Legacy observer slot adjustment
+      if (isLegacyMode) {
+        data.player.observer_slot =
+          data.player.observer_slot !== undefined && data.player.observer_slot === 9
+            ? 0
+            : (data.player.observer_slot || 0) + 1;
       } else {
-        if (data.allplayers) {
-          delete data.allplayers[id];
-        }
+        data.player.observer_slot =
+          data.player.observer_slot !== undefined && data.player.observer_slot === 9
+            ? 0
+            : (data.player.observer_slot || 0) + 1;
       }
-    });
+    }
+
+    if (data.allplayers) {
+      Object.entries(data.allplayers).forEach(([id, player]) => {
+        if (player && !coaches.includes(id)) {
+          // CS:GO Legacy observer slot adjustment for all players
+          if (isLegacyMode) {
+            player.observer_slot =
+              player.observer_slot === 9 ? 0 : (player.observer_slot || 0) + 1;
+          } else {
+            player.observer_slot =
+              player.observer_slot === 9 ? 0 : (player.observer_slot || 0) + 1;
+          }
+        } else {
+          if (data.allplayers) {
+            delete data.allplayers[id];
+          }
+        }
+      });
+    }
+  } catch (error) {
+    console.error("Error fixing GSI data:", error);
   }
 };
 

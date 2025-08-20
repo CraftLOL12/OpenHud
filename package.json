@@ -8,7 +8,7 @@
     "name": "JohnTimmermann",
     "email": "johnwtimmermann@yahoo.com"
   },
-  "description": "OpenHud - CS2 Admin Panel / HUD",
+  "description": "OpenHud - CS:GO Legacy Admin Panel / HUD",
   "repository": "https://github.com/JohnTimmermann/OpenHud",
   "scripts": {
     "dev": "npm-run-all --parallel dev:react dev:electron",
